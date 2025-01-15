@@ -1,0 +1,31 @@
+name: Azure Bicep Deployment
+on:
+push:
+branches:
+    - ["master"]
+jobs:
+   build:
+     runs-on: ubuntu-latest
+     steps:
+       - name: Checkout repository
+         uses: actions/checkout@v3
+       - name: Echo Script
+         run : echo Starting Bicep...
+       - name: Login with Azure 
+         uses: azure/login@v1
+         with:
+           creds: '${{ secrets.AZURE_CREDENTIALS }}'
+       - name: Deploy the Bicep Script
+         uses: azure/arm-deploy@v1
+         with:
+           resourceGroupName: "WebappGroup"
+           template: azure-resources.bicep
+
+           
+      #      curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
+      #      chmod +x ./bicep
+      #      sudo mv ./bicep /usr/local/bin/bicep
+      #  - name: Build and deploy Azure resources
+      #    run: |
+      #      bicep build azure-resources.bicep
+      #      az deployment sub create --name myDeployment --location northeurope --template-file ./azure-resources.json
